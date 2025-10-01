@@ -46,7 +46,7 @@ export const DictionaryTooltip = ({ word, position, onClose }: DictionaryTooltip
           definition: def?.definition || 'No definition available',
           example: def?.example || undefined
         });
-      } catch (err) {
+      } catch {
         setError(true);
       } finally {
         setLoading(false);
