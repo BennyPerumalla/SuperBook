@@ -6,50 +6,105 @@ console.log("SuperBook content script loaded");
 let hoverButtonEl = null;
 let tooltipEl = null;
 let hideHoverTimeout = null;
+let isInteracting = false; // prevents accidental hide while clicking button/tooltip
+let enabled = true; // default active; can be overridden by background settings
+let lastSelectionRect = null; // track rect to reposition while scrolling
 
 function initializeSuperBook() {
-  document.addEventListener("mouseup", onMouseUpSelection);
+  document.addEventListener("mouseup", onMouseUpOrKeySelection, true);
+  document.addEventListener("keyup", onMouseUpOrKeySelection, true);
   document.addEventListener("selectionchange", onSelectionChange);
-  window.addEventListener("scroll", hideHoverButton, { passive: true });
+  window.addEventListener("scroll", onScrollReposition, { passive: true });
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
       removeTooltip();
       hideHoverButton();
     }
   });
+
+  // Respect extension enabled setting if provided
+  try {
+    chrome.runtime.sendMessage(
+      { action: "getSettings" },
+      (res) => {
+        if (res && typeof res.enabled !== "undefined") {
+          enabled = !!res.enabled;
+        }
+      }
+    );
+  } catch (_) {
+    // ignore if not available
+  }
+
+  // Respond to toggle messages
+  try {
+    chrome.runtime.onMessage.addListener((message) => {
+      if (message && message.action === "toggleExtension") {
+        enabled = !!message.enabled;
+        if (!enabled) {
+          hideHoverButton();
+          removeTooltip();
+        }
+      }
+    });
+  } catch (_) {}
 }
 
 function onSelectionChange() {
-  // Debounce hover hide to avoid flicker while selecting
+  // Debounce and then recompute; if selection is invalid, hide, otherwise show/reposition
   clearTimeout(hideHoverTimeout);
   hideHoverTimeout = setTimeout(() => {
-    hideHoverButton();
-  }, 120);
+    updateHoverFromCurrentSelection();
+  }, 80);
 }
 
-function onMouseUpSelection() {
+function onMouseUpOrKeySelection() {
   const selection = window.getSelection();
-  if (!selection || selection.isCollapsed) {
+  if (!selection) return hideHoverButton();
+  updateHoverFromCurrentSelection();
+}
+
+function isValidSelection(selection) {
+  if (!enabled) return false;
+  if (!selection || selection.isCollapsed) return false;
+  // Ignore inside inputs or textareas
+  const anchorNode = selection.anchorNode && selection.anchorNode.parentElement;
+  if (anchorNode && (anchorNode.closest("input, textarea, [contenteditable=true]"))) return false;
+
+  const text = selection.toString().trim();
+  if (!text) return false;
+  if (text.split(/\s+/).length !== 1) return false; // single word
+  if (text.length < 2) return false; // avoid single letters
+  return true;
+}
+
+function updateHoverFromCurrentSelection() {
+  const selection = window.getSelection();
+  if (!isValidSelection(selection)) {
     hideHoverButton();
+    lastSelectionRect = null;
     return;
   }
-
-  const selectedText = selection.toString().trim();
-  if (!selectedText || selectedText.split(/\s+/).length !== 1) {
-    hideHoverButton();
-    return;
-  }
-
   const range = selection.getRangeAt(0);
   const rect = range.getBoundingClientRect();
   if (!rect || (rect.width === 0 && rect.height === 0)) {
     hideHoverButton();
+    lastSelectionRect = null;
     return;
   }
-
+  lastSelectionRect = rect;
   const x = rect.left + rect.width / 2 + window.scrollX;
-  const y = rect.top + window.scrollY; // top of selection
-  showHoverButton({ x, y }, selectedText);
+  const y = rect.top + window.scrollY;
+  showHoverButton({ x, y }, selection.toString().trim());
+}
+
+function onScrollReposition() {
+  if (!hoverButtonEl || hoverButtonEl.style.display === "none") return;
+  if (!lastSelectionRect) return hideHoverButton();
+  const rect = lastSelectionRect;
+  const x = rect.left + rect.width / 2 + window.scrollX;
+  const y = rect.top + window.scrollY;
+  positionHoverButton({ x, y });
 }
 
 function createHoverButton() {
@@ -69,6 +124,7 @@ function createHoverButton() {
 
   btn.addEventListener("mousedown", (e) => {
     // Prevent selection clearing on click
+    isInteracting = true;
     e.preventDefault();
   });
 
@@ -77,6 +133,8 @@ function createHoverButton() {
     const bx = Number(btn.dataset.x || 0);
     const by = Number(btn.dataset.y || 0);
     showTooltip(word, { x: bx, y: by });
+    // Keep hover visible; tooltip will close on outside click or ESC
+    setTimeout(() => { isInteracting = false; }, 50);
   });
 
   document.documentElement.appendChild(btn);
@@ -88,19 +146,22 @@ function showHoverButton(position, word) {
     hoverButtonEl = createHoverButton();
   }
 
-  const offsetY = 10; // pixels above selection
-  hoverButtonEl.style.left = `${Math.round(position.x - 16)}px`;
-  hoverButtonEl.style.top = `${Math.round(position.y - offsetY - 32)}px`;
-  hoverButtonEl.style.display = "block";
+  positionHoverButton(position);
+  hoverButtonEl.style.display = "flex";
   hoverButtonEl.dataset.word = word;
   hoverButtonEl.dataset.x = String(position.x);
   hoverButtonEl.dataset.y = String(position.y);
 }
 
+function positionHoverButton(position) {
+  const offsetY = 10; // pixels above selection
+  hoverButtonEl.style.left = `${Math.round(position.x - 16)}px`;
+  hoverButtonEl.style.top = `${Math.round(position.y - offsetY - 32)}px`;
+}
+
 function hideHoverButton() {
-  if (hoverButtonEl) {
-    hoverButtonEl.style.display = "none";
-  }
+  if (isInteracting) return; // do not hide while interacting with UI
+  if (hoverButtonEl) hoverButtonEl.style.display = "none";
 }
 
 function removeTooltip() {
