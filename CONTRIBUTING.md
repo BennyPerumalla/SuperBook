@@ -12,8 +12,8 @@ You can help SuperBook grow in many ways:
 - 🐛 Report and fix bugs  
 - 💡 Suggest new features or improvements  
 - 🧹 Refactor or optimize existing code  
-- 🎨 Improve UI/UX design  
-- 📝 Enhance documentation  
+- 🎨 Improve UI/UX design
+- 📝 Enhance documentation
 
 ---
 
