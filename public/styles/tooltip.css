@@ -1,6 +1,27 @@
 /* SuperBook Tooltip Styles */
 /* Styles for word definition tooltips and UI elements */
 
+.superbook-hover-btn {
+  position: absolute;
+  z-index: 10001;
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  background: #111827;
+  border: 1px solid #374151;
+  display: none; /* toggled by script */
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  cursor: pointer;
+  padding: 0;
+}
+
+.superbook-hover-btn:hover {
+  background: #0f172a;
+  border-color: #4b5563;
+}
+
 .superbook-tooltip {
   position: absolute;
   background: #1a1a1a;
