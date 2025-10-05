@@ -43,16 +43,17 @@ chrome.action.onClicked.addListener((tab) => {
 
 // Update extension icon based on state
 function updateIcon(enabled) {
+  // Chrome action.setIcon accepts either a single path or an object keyed by size.
+  // Use sizes 16/24/32 to satisfy environments that validate specific buckets.
   const baseActive = {
     16: chrome.runtime.getURL("icons/icon16.png"),
-    48: chrome.runtime.getURL("icons/icon48.png"),
-    128: chrome.runtime.getURL("icons/icon128.png"),
+    24: chrome.runtime.getURL("icons/icon16.png"), // fallback to 16
+    32: chrome.runtime.getURL("icons/icon48.png"), // downscale 48
   };
   const baseDisabled = {
-    // If you add disabled icons, update these URLs accordingly
     16: chrome.runtime.getURL("icons/icon16.png"),
-    48: chrome.runtime.getURL("icons/icon48.png"),
-    128: chrome.runtime.getURL("icons/icon128.png"),
+    24: chrome.runtime.getURL("icons/icon16.png"),
+    32: chrome.runtime.getURL("icons/icon48.png"),
   };
 
   const iconPath = enabled ? baseActive : baseDisabled;

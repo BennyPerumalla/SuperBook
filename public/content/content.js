@@ -24,14 +24,11 @@ function initializeSuperBook() {
 
   // Respect extension enabled setting if provided
   try {
-    chrome.runtime.sendMessage(
-      { action: "getSettings" },
-      (res) => {
-        if (res && typeof res.enabled !== "undefined") {
-          enabled = !!res.enabled;
-        }
+    chrome.runtime.sendMessage({ action: "getSettings" }, (res) => {
+      if (res && typeof res.enabled !== "undefined") {
+        enabled = !!res.enabled;
       }
-    );
+    });
   } catch (_) {
     // ignore if not available
   }
@@ -69,7 +66,11 @@ function isValidSelection(selection) {
   if (!selection || selection.isCollapsed) return false;
   // Ignore inside inputs or textareas
   const anchorNode = selection.anchorNode && selection.anchorNode.parentElement;
-  if (anchorNode && (anchorNode.closest("input, textarea, [contenteditable=true]"))) return false;
+  if (
+    anchorNode &&
+    anchorNode.closest("input, textarea, [contenteditable=true]")
+  )
+    return false;
 
   const text = selection.toString().trim();
   if (!text) return false;
@@ -134,7 +135,9 @@ function createHoverButton() {
     const by = Number(btn.dataset.y || 0);
     showTooltip(word, { x: bx, y: by });
     // Keep hover visible; tooltip will close on outside click or ESC
-    setTimeout(() => { isInteracting = false; }, 50);
+    setTimeout(() => {
+      isInteracting = false;
+    }, 50);
   });
 
   document.documentElement.appendChild(btn);
@@ -176,19 +179,26 @@ async function showTooltip(word, position) {
 
   tooltipEl = document.createElement("div");
   tooltipEl.className = "superbook-tooltip";
-  tooltipEl.style.left = `${Math.min(position.x + 8, window.scrollX + document.documentElement.clientWidth - 320)}px`;
+  tooltipEl.style.left = `${Math.min(
+    position.x + 8,
+    window.scrollX + document.documentElement.clientWidth - 320
+  )}px`;
   tooltipEl.style.top = `${Math.max(position.y - 8, window.scrollY + 8)}px`;
 
   const content = document.createElement("div");
   content.className = "superbook-definition";
-  content.innerHTML = `<span class="superbook-loading">Looking up "${escapeHtml(word)}"</span>`;
+  content.innerHTML = `<span class="superbook-loading">Looking up "${escapeHtml(
+    word
+  )}"</span>`;
   tooltipEl.appendChild(content);
 
   document.documentElement.appendChild(tooltipEl);
 
   try {
     const res = await fetch(
-      `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word.toLowerCase())}`
+      `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(
+        word.toLowerCase()
+      )}`
     );
     if (!res.ok) throw new Error("not found");
     const data = await res.json();
@@ -197,19 +207,41 @@ async function showTooltip(word, position) {
     const def = (meaning.definitions && meaning.definitions[0]) || {};
 
     const parts = [];
-    if (entry.word) parts.push(`<div class="superbook-word">${escapeHtml(entry.word)}</div>`);
+    if (entry.word)
+      parts.push(`<div class="superbook-word">${escapeHtml(entry.word)}</div>`);
     if (entry.phonetic || (entry.phonetics && entry.phonetics[0])) {
-      const ph = entry.phonetic || (entry.phonetics && entry.phonetics[0] && entry.phonetics[0].text) || "";
-      if (ph) parts.push(`<div class="superbook-pronunciation">${escapeHtml(ph)}</div>`);
+      const ph =
+        entry.phonetic ||
+        (entry.phonetics && entry.phonetics[0] && entry.phonetics[0].text) ||
+        "";
+      if (ph)
+        parts.push(
+          `<div class="superbook-pronunciation">${escapeHtml(ph)}</div>`
+        );
     }
-    if (meaning.partOfSpeech) parts.push(`<div class="superbook-definition"><strong>${escapeHtml(meaning.partOfSpeech)}</strong></div>`);
-    if (def.definition) parts.push(`<div class="superbook-definition">${escapeHtml(def.definition)}</div>`);
-    if (def.example) parts.push(`<div class="superbook-definition" style="opacity:.8;font-style:italic">"${escapeHtml(def.example)}"</div>`);
+    if (meaning.partOfSpeech)
+      parts.push(
+        `<div class="superbook-definition"><strong>${escapeHtml(
+          meaning.partOfSpeech
+        )}</strong></div>`
+      );
+    if (def.definition)
+      parts.push(
+        `<div class="superbook-definition">${escapeHtml(def.definition)}</div>`
+      );
+    if (def.example)
+      parts.push(
+        `<div class="superbook-definition" style="opacity:.8;font-style:italic">"${escapeHtml(
+          def.example
+        )}"</div>`
+      );
 
     content.innerHTML = parts.join("");
     tooltipEl.classList.add("show");
   } catch (e) {
-    content.innerHTML = `<span class="superbook-definition" style="color:#ef4444">No definition found for "${escapeHtml(word)}"</span>`;
+    content.innerHTML = `<span class="superbook-definition" style="color:#ef4444">No definition found for "${escapeHtml(
+      word
+    )}"</span>`;
     tooltipEl.classList.add("show");
   }
 
@@ -217,7 +249,11 @@ async function showTooltip(word, position) {
   const onDocClick = (ev) => {
     const target = ev.target;
     if (!tooltipEl) return;
-    if (tooltipEl.contains(target) || (hoverButtonEl && hoverButtonEl.contains(target))) return;
+    if (
+      tooltipEl.contains(target) ||
+      (hoverButtonEl && hoverButtonEl.contains(target))
+    )
+      return;
     removeTooltip();
     document.removeEventListener("click", onDocClick, true);
   };
