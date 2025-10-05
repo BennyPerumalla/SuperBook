@@ -30,11 +30,11 @@ SuperBook is an **open-source Chrome extension** that enhances your reading expe
 
 ## ✨ Features
 
-- ⚡ **Instant Definitions:** Select any word to get instant dictionary meanings  
-- 🎨 **Beautiful UI:** Modern, minimal, and accessible design with React + Tailwind CSS  
-- 🚀 **Fast & Lightweight:** Built with performance and low resource usage in mind  
-- 🔒 **Privacy-Focused:** Works entirely offline after setup; no data collection  
-- 🌐 **Universal Compatibility:** Works seamlessly across all websites  
+- ⚡ **Instant Definitions:** Select any word to get instant dictionary meanings
+- 🎨 **Beautiful UI:** Modern, minimal, and accessible design with React + Tailwind CSS
+- 🚀 **Fast & Lightweight:** Built with performance and low resource usage in mind
+- 🔒 **Privacy-Focused:** Works entirely offline after setup; no data collection
+- 🌐 **Universal Compatibility:** Works seamlessly across all websites
 
 ---
 
@@ -48,20 +48,25 @@ For now, you can test it manually via Developer Mode (see below).
 
 ## 🚀 Installation
 
-### 🔹 From Chrome Web Store  
-*Coming soon – extension will be published to the Chrome Web Store.*
+### 🔹 From Chrome Web Store
+
+_Coming soon – extension will be published to the Chrome Web Store._
 
 ### 🔹 Manual Installation (Developer Mode)
 
-1. Download or clone this repository  
+1. Download or clone this repository
+
    ```bash
    git clone https://github.com/BennyPerumalla/SuperBook
+
+   ```
 
 2. Open Chrome and go to:
 
    ```
    chrome://extensions/
    ```
+
 3. Enable **Developer mode** (top right corner)
 4. Click **Load unpacked** and select the `public` folder
 5. You’ll now see **SuperBook** listed in your extensions
@@ -77,10 +82,10 @@ We recommend using **pnpm** — a fast, disk-efficient package manager.
 
 `pnpm` is a next-generation package manager that:
 
-* 🚀 **Installs dependencies faster** by using a global content-addressable store
-* 💾 **Saves disk space** — shared packages aren’t duplicated across projects
-* ⚡ **Improves performance** with efficient caching and linking
-* 🧩 **Maintains strict version control**, ensuring consistent builds
+- 🚀 **Installs dependencies faster** by using a global content-addressable store
+- 💾 **Saves disk space** — shared packages aren’t duplicated across projects
+- ⚡ **Improves performance** with efficient caching and linking
+- 🧩 **Maintains strict version control**, ensuring consistent builds
 
 In short, it’s **faster**, **leaner**, and **more reliable** than traditional npm installs.
 
@@ -211,12 +216,12 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 If you find a bug or want to suggest an improvement:
 
-* Open an issue here → [GitHub Issues](https://github.com/your-username/SuperBook/issues)
-* Clearly describe:
+- Open an issue here → [GitHub Issues](https://github.com/your-username/SuperBook/issues)
+- Clearly describe:
 
-  * The problem or suggestion
-  * Steps to reproduce (if applicable)
-  * Expected vs actual behavior
+  - The problem or suggestion
+  - Steps to reproduce (if applicable)
+  - Expected vs actual behavior
 
 ---
 
@@ -224,8 +229,8 @@ If you find a bug or want to suggest an improvement:
 
 If you have questions or need help:
 
-* Check the [Issues](https://github.com/your-username/SuperBook/issues) page
-* Or create a new issue — we’re happy to assist!
+- Check the [Issues](https://github.com/your-username/SuperBook/issues) page
+- Or create a new issue — we’re happy to assist!
 
 ---
 
