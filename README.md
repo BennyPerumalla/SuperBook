@@ -125,7 +125,7 @@ You should see the version number (e.g., `9.0.0` or later).
    pnpm install
    ```
 
-4. **Start local development**
+4. **Start local development (demo site)**
 
    ```bash
    pnpm run dev
@@ -143,14 +143,30 @@ You should see the version number (e.g., `9.0.0` or later).
 
 ```
 SuperBook/
-├── public/           # Extension files (manifest, icons, background scripts)
-├── src/              # React source code
-│   ├── components/   # Reusable UI components
-│   ├── hooks/        # Custom React hooks
-│   ├── lib/          # Helper / utility functions
-│   └── pages/        # Extension popup & content scripts
-├── manifest.json     # Chrome Extension Manifest V3
-└── package.json      # Project dependencies
+├── public/                      # Extension bundle + web demo static
+│   ├── manifest.json            # Chrome Extension Manifest V3
+│   ├── background/              # Background service worker (MV3)
+│   │   └── background.js
+│   ├── content/                 # Content scripts injected on pages
+│   │   └── content.js
+│   ├── popup/                   # Popup scripts (canonical popup is popup.html)
+│   │   └── popup.js
+│   ├── styles/                  # CSS for in‑page tooltip/highlights
+│   │   └── tooltip.css
+│   ├── icons/                   # Extension icons
+│   │   ├── icon16.png
+│   │   ├── icon48.png
+│   │   └── icon128.png
+│   ├── popup.html               # Canonical popup UI (terminal‑style)
+│   └── popup-terminal.html      # Alternate popup kept for reference
+├── src/                         # React demo app (Vite)
+│   ├── components/              # Reusable UI + demo components
+│   ├── hooks/                   # Custom React hooks
+│   ├── lib/                     # Helpers / utilities
+│   └── pages/                   # Demo pages (Index, NotFound)
+├── index.html                   # Demo app HTML shell (Vite)
+├── package.json                 # Project dependencies
+└── vite.config.ts               # Vite setup (alias `@` → ./src)
 ```
 
 ---
@@ -164,6 +180,14 @@ SuperBook/
 | **Build Tool**     | Vite                         |
 | **Extension API**  | Chrome Extension Manifest V3 |
 | **Dictionary API** | Free Dictionary API          |
+
+---
+
+## 🧭 Notes on Architecture
+
+- The extension runtime (MV3) assets live under `public/background/`, `public/content/`, and `public/styles/`, referenced by `public/manifest.json`.
+- The popup’s canonical entry is `public/popup.html`. The alternate `public/popup-terminal.html` is retained for reference.
+- The React demo app under `src/` showcases the tooltip UX (`DictionaryDemo` + `DictionaryTooltip`) and is separate from the extension popup.
 
 ---
 
