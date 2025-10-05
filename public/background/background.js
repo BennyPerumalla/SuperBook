@@ -43,20 +43,27 @@ chrome.action.onClicked.addListener((tab) => {
 
 // Update extension icon based on state
 function updateIcon(enabled) {
-  const iconPath = enabled
-    ? {
-        16: "icons/icon16.png",
-        48: "icons/icon48.png",
-        128: "icons/icon128.png",
-      }
-    : {
-        // If you add disabled icons, update these paths accordingly
-        16: "icons/icon16.png",
-        48: "icons/icon48.png",
-        128: "icons/icon128.png",
-      };
+  const baseActive = {
+    16: chrome.runtime.getURL("icons/icon16.png"),
+    48: chrome.runtime.getURL("icons/icon48.png"),
+    128: chrome.runtime.getURL("icons/icon128.png"),
+  };
+  const baseDisabled = {
+    // If you add disabled icons, update these URLs accordingly
+    16: chrome.runtime.getURL("icons/icon16.png"),
+    48: chrome.runtime.getURL("icons/icon48.png"),
+    128: chrome.runtime.getURL("icons/icon128.png"),
+  };
 
-  chrome.action.setIcon({ path: iconPath });
+  const iconPath = enabled ? baseActive : baseDisabled;
+
+  try {
+    chrome.action.setIcon({ path: iconPath });
+  } catch (e) {
+    // Some environments throw if a path is not resolvable; log for diagnostics
+    console.warn("SuperBook: Failed to set icon", e);
+  }
+
   chrome.action.setTitle({
     title: enabled
       ? "Quick Dictionary (Enabled)"
