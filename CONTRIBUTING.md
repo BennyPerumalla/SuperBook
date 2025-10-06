@@ -1,7 +1,7 @@
 # 🤝 Contributing to SuperBook
 
-Welcome, and thank you for your interest in contributing to **SuperBook**! 📚  
-We’re thrilled to have you here — whether you’re fixing a typo, improving performance, or adding a new feature.  
+Welcome, and thank you for your interest in contributing to **SuperBook**! 📚
+We’re thrilled to have you here — whether you’re fixing a typo, improving performance, or adding a new feature.
 Every contribution matters. 💪
 
 ---
@@ -9,24 +9,47 @@ Every contribution matters. 💪
 ## 🧠 Ways to Contribute
 
 You can help SuperBook grow in many ways:
-- 🐛 Report and fix bugs  
-- 💡 Suggest new features or improvements  
-- 🧹 Refactor or optimize existing code  
-- 🎨 Improve UI/UX design
-- 📝 Enhance documentation
+
+* 🐛 Report and fix bugs
+* 💡 Suggest new features or improvements
+* 🧹 Refactor or optimize existing code
+* 🎨 Improve UI/UX design
+* 📝 Enhance documentation
+
+---
+
+## 🪪 Contribution Workflow
+
+To ensure smooth collaboration and avoid duplicate work:
+
+1. **Find an existing issue** in the [Issues section](https://github.com/your-username/SuperBook/issues) that you’d like to work on.
+
+   * If no issue exists for your idea, create a **new one** clearly describing the change or enhancement.
+
+2. **Ask to be assigned**
+
+   * Comment under the issue:
+
+     > “Hey, I’d like to work on this issue. Can you please assign it to me?”
+   * Wait until a maintainer **assigns the issue to you** before starting any work.
+   * This ensures no two people are working on the same issue.
+
+3. Once assigned, follow the setup and development steps below. ✅
 
 ---
 
 ## ⚙️ Development Setup
 
 ### Prerequisites
-- **Node.js** (v16 or higher)
-- **pnpm** package manager
+
+* **Node.js** (v16 or higher)
+* **pnpm** package manager
 
 If you don’t have **pnpm** installed yet, install it globally using npm:
+
 ```bash
 npm install -g pnpm
-````
+```
 
 Verify installation:
 
@@ -39,7 +62,7 @@ pnpm -v
 ### Local Setup
 
 1. **Fork the repository**
-   Click on the “Fork” button at the top right of this repo to create your copy.
+   Click the “Fork” button at the top right of this repo to create your copy.
 
 2. **Clone your fork**
 
@@ -54,7 +77,7 @@ pnpm -v
    git checkout -b feature/your-feature-name
    ```
 
-4. **Install dependencies using pnpm**
+4. **Install dependencies**
 
    ```bash
    pnpm install
@@ -82,12 +105,13 @@ Please follow these conventions to maintain code quality and consistency:
 
 * Follow existing **React + TypeScript** patterns.
 * Use **Tailwind CSS** for styling (avoid inline styles unless necessary).
-* Use **ESLint and Prettier** (if configured) to ensure consistent formatting.
+* Use **ESLint** and **Prettier** for consistent formatting.
+
+---
 
 ### 🧾 Commit Message Format
 
-Keep commit messages clear and structured.
-Use **conventional commit** style:
+Use the **Conventional Commit** style for clarity and automation support:
 
 | Type        | Purpose                                      |
 | ----------- | -------------------------------------------- |
@@ -125,36 +149,39 @@ docs: update installation steps for pnpm
    * Why it’s needed
    * How it was tested
 
+> ⚠️ **Note:** Only open PRs for issues **assigned to you**. Unassigned PRs may be closed to avoid conflicts.
+
 Once reviewed, your PR will be merged or feedback will be provided.
 
 ---
 
 ## 🐞 Reporting Bugs
 
-Found a bug? Please help us fix it.
+Found a bug? Please help us fix it:
 
 * Open a [GitHub Issue](https://github.com/your-username/SuperBook/issues)
 * Include:
 
   * A clear title and description
   * Steps to reproduce
-  * Expected vs actual behavior
+  * Expected vs. actual behavior
   * Screenshots (if relevant)
-
-Use the `bug` label for tracking.
+* Add the `bug` label.
 
 ---
 
 ## 💡 Feature Requests
 
-Got an idea? We’d love to hear it!
+Have an idea for improvement?
 
-* Open an issue with the label `enhancement`
-* Explain your feature clearly:
+* Open an issue with the label `enhancement`.
+* Explain:
 
   * What problem it solves
   * Why it’s valuable
-  * Optional: mockups or examples
+  * Optionally include mockups or references
+
+Wait for feedback and assignment before starting work.
 
 ---
 
@@ -170,7 +197,7 @@ Harassment or disrespectful behavior will not be tolerated.
 
 * Keep discussions constructive and friendly.
 * Respect maintainers’ review time and feedback.
-* Celebrate diversity of ideas — that’s how open source grows!
+* Celebrate diverse ideas — that’s how open source grows!
 
 ---
 
@@ -190,9 +217,9 @@ We built SuperBook to make web reading smarter and smoother — and your contrib
 Whether it’s your first PR or your fiftieth, **thank you for helping improve SuperBook!**
 
 **Happy contributing! 🚀**
-
 — *The SuperBook Team*
 
-```
-
 ---
+
+Would you like me to add a **“Before You Start” checklist** (like GitHub-style quick bullet points at the top)?
+It can make the contribution flow even clearer for first-timers.
