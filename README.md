@@ -6,9 +6,9 @@ SuperBook is an **open-source Chrome extension** that enhances your reading expe
 
 ## 🏷️ Badges
 
-![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 ![Build](https://img.shields.io/github/actions/workflow/status/your-username/SuperBook/ci.yml?label=build)
-![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)
+[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg)](CONTRIBUTING.md)
 ![Status](https://img.shields.io/badge/status-active-success.svg)
 
 ---
