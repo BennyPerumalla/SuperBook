@@ -1,12 +1,12 @@
 /**
- * Quick Dictionary Chrome Extension - Background Script
+ * SuperBook  Chrome Extension - Background Script
  * Handles extension lifecycle and storage
  */
 
 // Extension installation
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === "install") {
-    console.log("Quick Dictionary extension installed");
+    console.log("SuperBook extension installed");
 
     // Set default settings
     chrome.storage.sync.set({
@@ -15,7 +15,7 @@ chrome.runtime.onInstalled.addListener((details) => {
       hideDelay: 5000,
     });
   } else if (details.reason === "update") {
-    console.log("Quick Dictionary extension updated");
+    console.log("SuperBook extension updated");
   }
 });
 
@@ -67,8 +67,8 @@ function updateIcon(enabled) {
 
   chrome.action.setTitle({
     title: enabled
-      ? "Quick Dictionary (Enabled)"
-      : "Quick Dictionary (Disabled)",
+      ? "SuperBook (Enabled)"
+      : "SuperBook (Disabled)",
   });
 }
 

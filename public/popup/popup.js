@@ -1,5 +1,5 @@
 /**
- * Quick Dictionary Chrome Extension - Popup Script
+ * SuperBook Chrome Extension - Popup Script
  * Terminal-style interface for dictionary lookups
  */
 
