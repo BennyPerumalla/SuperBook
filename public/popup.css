@@ -62,6 +62,50 @@ body {
   font-size: 12px;
   color: #999;
   margin-left: 8px;
+  flex: 1;
+}
+
+/* Toggle Button Styles */
+.toggle-btn {
+  background: transparent;
+  border: 1px solid #444;
+  color: #4ade80;
+  padding: 4px 12px;
+  font-family: inherit;
+  font-size: 14px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 8px;
+}
+
+.toggle-btn:hover {
+  background: #333;
+  border-color: #4ade80;
+  box-shadow: 0 0 8px rgba(74, 222, 128, 0.3);
+}
+
+.toggle-enabled {
+  color: #4ade80;
+  border-color: #4ade80;
+}
+
+.toggle-disabled {
+  color: #ef4444;
+  border-color: #ef4444;
+}
+
+.toggle-disabled:hover {
+  border-color: #ef4444;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.3);
+}
+
+.toggle-icon {
+  font-size: 16px;
+  line-height: 1;
 }
 
 .terminal-body {
@@ -239,9 +283,6 @@ body {
 }
 
 .clear-btn {
-  position: absolute;
-  top: 8px;
-  right: 12px;
   background: transparent;
   border: 1px solid #444;
   color: #999;
@@ -272,6 +313,7 @@ body {
   right: 12px;
   font-size: 10px;
   color: #666;
+  transition: color 0.3s;
 }
 
 .status-enabled {
