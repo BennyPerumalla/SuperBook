@@ -45,25 +45,27 @@ chrome.action.onClicked.addListener((tab) => {
 function updateIcon(enabled) {
   // Chrome action.setIcon accepts either a single path or an object keyed by size.
   // Use sizes 16/24/32 to satisfy environments that validate specific buckets.
+  // Use sizes that match the actual image files included in the extension.
+  // Keys must match the image dimensions expected by the browser (e.g. "16", "48", "128").
   const baseActive = {
-    16: chrome.runtime.getURL("icons/icon16.png"),
-    24: chrome.runtime.getURL("icons/icon16.png"), // fallback to 16
-    32: chrome.runtime.getURL("icons/icon48.png"), // downscale 48
+    "16": chrome.runtime.getURL("icons/icon16.png"),
+    "48": chrome.runtime.getURL("icons/icon48.png"),
+    "128": chrome.runtime.getURL("icons/icon128.png"),
   };
   const baseDisabled = {
-    16: chrome.runtime.getURL("icons/icon16.png"),
-    24: chrome.runtime.getURL("icons/icon16.png"),
-    32: chrome.runtime.getURL("icons/icon48.png"),
+    "16": chrome.runtime.getURL("icons/icon16.png"),
+    "48": chrome.runtime.getURL("icons/icon48.png"),
+    "128": chrome.runtime.getURL("icons/icon128.png"),
   };
 
   const iconPath = enabled ? baseActive : baseDisabled;
 
-  try {
-    chrome.action.setIcon({ path: iconPath });
-  } catch (e) {
-    // Some environments throw if a path is not resolvable; log for diagnostics
-    console.warn("SuperBook: Failed to set icon", e);
-  }
+  // Set icon and surface any runtime.lastError in the callback for easier debugging
+  chrome.action.setIcon({ path: iconPath }, () => {
+    if (chrome.runtime.lastError) {
+      console.warn("SuperBook: Failed to set icon -", chrome.runtime.lastError.message);
+    }
+  });
 
   chrome.action.setTitle({
     title: enabled
