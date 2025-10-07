@@ -15,11 +15,37 @@
   box-shadow: 0 6px 20px rgba(0,0,0,0.25);
   cursor: pointer;
   padding: 0;
+  overflow: hidden;
 }
 
 .superbook-hover-btn:hover {
   background: #0f172a;
   border-color: #4b5563;
+}
+
+/* Icon image inside the hover button */
+.superbook-hover-btn img {
+  display: block;
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  transition: all 220ms cubic-bezier(.22,1,.36,1);
+  pointer-events: none;
+  opacity: 0.9;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+button.superbook-hover-btn:hover img {
+  transform: scale(1.15) translateY(-1px) !important;
+  opacity: 1 !important;
+  filter: drop-shadow(0 0 8px #4ade80) !important;
+  box-shadow: 0 0 12px #4ade80 !important;
+}
+
+button.superbook-hover-btn:hover {
+  background: #193a2f !important;
+  border-color: #4b5563 !important;
 }
 
 .superbook-tooltip {
