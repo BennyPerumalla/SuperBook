@@ -2,14 +2,55 @@ const wordInput = document.getElementById("wordInput");
 const output = document.getElementById("output");
 const cursor = document.getElementById("cursor");
 const statusIndicator = document.getElementById("statusIndicator");
+const toggleBtn = document.getElementById("toggleBtn");
+const toggleIcon = document.getElementById("toggleIcon");
 
-// Check extension status
-chrome.storage.sync.get(["enabled"], (result) => {
-  const enabled = result.enabled !== false;
-  statusIndicator.className = `status-indicator ${
-    enabled ? "status-enabled" : "status-disabled"
-  }`;
-  statusIndicator.textContent = `● ${enabled ? "online" : "offline"}`;
+// Check and update extension status
+function updateExtensionStatus() {
+  chrome.storage.sync.get(["enabled"], (result) => {
+    const enabled = result.enabled !== false;
+    
+    // Update status indicator
+    statusIndicator.className = `status-indicator ${
+      enabled ? "status-enabled" : "status-disabled"
+    }`;
+    statusIndicator.textContent = `● ${enabled ? "online" : "offline"}`;
+    
+    // Update toggle button
+    toggleBtn.className = `toggle-btn ${enabled ? "toggle-enabled" : "toggle-disabled"}`;
+    toggleBtn.title = enabled ? "Click to disable extension" : "Click to enable extension";
+    toggleIcon.textContent = enabled ? "●" : "○";
+  });
+}
+
+// Initialize status on load
+updateExtensionStatus();
+
+// Handle toggle button click
+toggleBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  
+  chrome.storage.sync.get(["enabled"], (result) => {
+    const newState = !result.enabled;
+    
+    // Send message to background script to toggle extension
+    chrome.runtime.sendMessage(
+      { action: "toggleExtension", enabled: newState },
+      (response) => {
+        if (response && response.success) {
+          updateExtensionStatus();
+        }
+      }
+    );
+  });
+});
+
+// Listen for storage changes to update status
+chrome.storage.onChanged.addListener((changes, namespace) => {
+  if (namespace === "sync" && changes.enabled) {
+    updateExtensionStatus();
+  }
 });
 
 // Focus input on load
@@ -160,13 +201,13 @@ function displayError(word) {
 
 function clearOutput() {
   output.innerHTML = `
-        <div class="output-line">
-          <span style="color: #4ade80;">Terminal cleared.</span>
-        </div>
-        <div class="output-line">
-          &nbsp;
-        </div>
-      `;
+    <div class="output-line">
+      <span style="color: #4ade80;">Terminal cleared.</span>
+    </div>
+    <div class="output-line">
+      &nbsp;
+    </div>
+  `;
   wordInput.focus();
 }
 
