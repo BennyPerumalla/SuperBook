@@ -23,5 +23,9 @@
   "action": {
     "default_popup": "popup.html"
   },
-  "host_permissions": ["https://api.dictionaryapi.dev/*"]
+  "host_permissions": ["https://api.dictionaryapi.dev/*"],
+  "web_accessible_resources": [{
+    "resources": ["icons/*.png"],
+    "matches": ["<all_urls>"]
+  }]
 }

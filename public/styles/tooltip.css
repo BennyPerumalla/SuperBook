@@ -29,14 +29,18 @@
   width: 18px;
   height: 18px;
   object-fit: contain;
-  transition: transform 220ms cubic-bezier(.22,1,.36,1), opacity 180ms, filter 180ms;
+  transition: all 220ms cubic-bezier(.22,1,.36,1);
   pointer-events: none;
+  opacity: 0.9;
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 button.superbook-hover-btn:hover img {
-  transform: scale(1.18) translateY(-2px) rotate(-6deg) !important;
+  transform: scale(1.15) translateY(-1px) !important;
   opacity: 1 !important;
-  filter: drop-shadow(0 0 6px #4ade80cc) !important;
+  filter: drop-shadow(0 0 8px #4ade80) !important;
+  box-shadow: 0 0 12px #4ade80 !important;
 }
 
 button.superbook-hover-btn:hover {

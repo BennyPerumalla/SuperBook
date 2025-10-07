@@ -120,7 +120,25 @@ function createHoverButton() {
   logo.height = 18;
   logo.draggable = false;
   // Use extension icon as logo
-  logo.src = chrome.runtime.getURL("icons/icon48.png");
+  try {
+    const iconUrl = chrome.runtime.getURL("icons/icon48.png");
+    if (iconUrl) {
+      logo.src = iconUrl;
+      logo.onerror = () => {
+        console.warn('Failed to load SuperBook icon, using fallback');
+        logo.style.backgroundColor = '#4ade80';
+        logo.style.borderRadius = '50%';
+      };
+    } else {
+      // Fallback if URL cannot be generated
+      logo.style.backgroundColor = '#4ade80';
+      logo.style.borderRadius = '50%';
+    }
+  } catch (e) {
+    // Extension context may be invalidated
+    logo.style.backgroundColor = '#4ade80';
+    logo.style.borderRadius = '50%';
+  }
   btn.appendChild(logo);
 
   btn.addEventListener("mousedown", (e) => {
