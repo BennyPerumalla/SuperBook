@@ -95,14 +95,6 @@ const SkeletonParagraph = ({ lines = 3, className, ...props }: { lines?: number 
   />
 );
 
-const SkeletonAvatar = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
-  <EnhancedSkeleton
-    variant="shimmer"
-    className={cn("h-10 w-10 rounded-full", className)}
-    {...props}
-  />
-);
-
 const SkeletonButton = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <EnhancedSkeleton
     variant="pulse"
@@ -116,6 +108,5 @@ export {
   SkeletonWord, 
   SkeletonLine, 
   SkeletonParagraph, 
-  SkeletonAvatar, 
   SkeletonButton 
 };
