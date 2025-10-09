@@ -142,7 +142,7 @@ docs: update installation steps for pnpm
    ```bash
    git push origin feature/your-feature-name
    ```
-5. Open a **Pull Request (PR)** to the `main` branch.
+5. Open a **Pull Request (PR)** to the `main` branch with relavent screenshots(if needed).
 6. Fill in the PR template (if available) describing:
 
    * What you changed
