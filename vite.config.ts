@@ -23,14 +23,12 @@ export default defineConfig(({ mode }) => ({
   // --- ADDED THIS SECTION ---
   // This configures Vitest to run your unit tests.
   test: {
-    // This tells Vitest to use a JSDOM environment for testing React components.
+    
     environment: 'jsdom',
-    // This is the key fix: it tells Vitest to IGNORE the folder 
-    // where your Playwright E2E tests are located.
     exclude: [
       '**/node_modules/**',
       '**/dist/**',
-      'tests/**', // Exclude the Playwright E2E tests directory
+      'tests/**', 
     ],
   },
 }));
