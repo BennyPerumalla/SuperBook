@@ -216,7 +216,7 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 If you find a bug or want to suggest an improvement:
 
-- Open an issue here → [GitHub Issues](https://github.com/your-username/SuperBook/issues)
+- Open an issue here → [GitHub Issues](https://github.com/BennyPerumalla/SuperBook/issues)
 - Clearly describe:
 
   - The problem or suggestion
@@ -229,7 +229,7 @@ If you find a bug or want to suggest an improvement:
 
 If you have questions or need help:
 
-- Check the [Issues](https://github.com/your-username/SuperBook/issues) page
+- Check the [Issues](https://github.com/BennyPerumalla/SuperBook/issues) page
 - Or create a new issue — we’re happy to assist!
 
 ---
