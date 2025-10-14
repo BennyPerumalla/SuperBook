@@ -218,35 +218,47 @@ function addToHistory(word) {
 
 // Show word history
 function showHistory() {
-  if (wordHistory.length === 0) {
-    const noHistoryLine = document.createElement("div");
-    noHistoryLine.className = "output-line";
-    noHistoryLine.innerHTML =
-      '<span style="color: #9ca3af;">No words in history yet.</span>';
-    output.appendChild(noHistoryLine);
-    return;
-  }
+  // Show loading state
+  const loadingLine = document.createElement("div");
+  loadingLine.className = "output-line loading";
+  loadingLine.innerHTML =
+    '<span>Loading history<span class="loading-dots"></span></span>';
+  output.appendChild(loadingLine);
 
-  const historyTitle = document.createElement("div");
-  historyTitle.className = "output-line";
-  historyTitle.innerHTML =
-    '<span style="color: #4ade80; font-weight: 600;">📚 Recent Words:</span>';
-  output.appendChild(historyTitle);
+  // Simulate loading delay for better UX
+  setTimeout(() => {
+    loadingLine.remove();
 
-  wordHistory.slice(0, 5).forEach((word, index) => {
-    const historyItem = document.createElement("div");
-    historyItem.className = "output-line";
-    historyItem.style.paddingLeft = "16px";
-    historyItem.innerHTML = `<span style="color: #60a5fa;">${
-      index + 1
-    }.</span> <span style="color: #e5e5e5; cursor: pointer;" onclick="wordInput.value='${word}'; wordInput.focus();">${word}</span>`;
-    output.appendChild(historyItem);
-  });
+    if (wordHistory.length === 0) {
+      const noHistoryLine = document.createElement("div");
+      noHistoryLine.className = "output-line";
+      noHistoryLine.innerHTML =
+        '<span style="color: #9ca3af;">No words in history yet.</span>';
+      output.appendChild(noHistoryLine);
+      return;
+    }
 
-  const spacer = document.createElement("div");
-  spacer.className = "output-line";
-  spacer.innerHTML = "&nbsp;";
-  output.appendChild(spacer);
+    const historyTitle = document.createElement("div");
+    historyTitle.className = "output-line";
+    historyTitle.innerHTML =
+      '<span style="color: #4ade80; font-weight: 600;">📚 Recent Words:</span>';
+    output.appendChild(historyTitle);
+
+    wordHistory.slice(0, 5).forEach((word, index) => {
+      const historyItem = document.createElement("div");
+      historyItem.className = "output-line";
+      historyItem.style.paddingLeft = "16px";
+      historyItem.innerHTML = `<span style="color: #60a5fa;">${
+        index + 1
+      }.</span> <span style="color: #e5e5e5; cursor: pointer;" onclick="wordInput.value='${word}'; wordInput.focus();">${word}</span>`;
+      output.appendChild(historyItem);
+    });
+
+    const spacer = document.createElement("div");
+    spacer.className = "output-line";
+    spacer.innerHTML = "&nbsp;";
+    output.appendChild(spacer);
+  }, 150);
 }
 
 function clearOutput() {
