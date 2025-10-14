@@ -9,11 +9,18 @@ let hideHoverTimeout = null;
 let isInteracting = false;
 let enabled = true;
 let lastSelectionRect = null;
+let isInitialized = false;
 
 const FETCH_TIMEOUT = 5000;
 const MAX_RETRIES = 2;
 
 function initializeSuperBook() {
+  // Prevent duplicate initialization
+  if (isInitialized) {
+    console.log("SuperBook already initialized, skipping...");
+    return;
+  }
+  isInitialized = true;
   document.addEventListener("mouseup", onMouseUpOrKeySelection, true);
   document.addEventListener("keyup", onMouseUpOrKeySelection, true);
   document.addEventListener("selectionchange", onSelectionChange);
