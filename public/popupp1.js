@@ -3,6 +3,15 @@ const output = document.getElementById("output");
 const cursor = document.getElementById("cursor");
 const statusIndicator = document.getElementById("statusIndicator");
 
+// Word history management
+let wordHistory = [];
+const MAX_HISTORY_SIZE = 10;
+
+// Load word history from storage
+chrome.storage.local.get(["wordHistory"], (result) => {
+  wordHistory = result.wordHistory || [];
+});
+
 // Check extension status
 chrome.storage.sync.get(["enabled"], (result) => {
   const enabled = result.enabled !== false;
@@ -34,11 +43,37 @@ wordInput.addEventListener("keydown", (e) => {
     }
   } else if (e.key === "Escape") {
     wordInput.value = "";
+  } else if (e.key === "ArrowUp") {
+    e.preventDefault();
+    navigateHistory(-1);
+  } else if (e.key === "ArrowDown") {
+    e.preventDefault();
+    navigateHistory(1);
   }
 });
 
+// History navigation
+let historyIndex = -1;
+function navigateHistory(direction) {
+  if (wordHistory.length === 0) return;
+
+  historyIndex += direction;
+
+  if (historyIndex < 0) {
+    historyIndex = -1;
+    wordInput.value = "";
+  } else if (historyIndex >= wordHistory.length) {
+    historyIndex = wordHistory.length - 1;
+  } else {
+    wordInput.value = wordHistory[historyIndex];
+  }
+}
+
 // Dictionary API lookup
 async function lookupWord(word) {
+  // Add word to history
+  addToHistory(word);
+
   const commandLine = document.createElement("div");
   commandLine.className = "output-line command-line";
   commandLine.textContent = `dict@lookup:~$ define "${word}"`;
@@ -151,6 +186,62 @@ function displayError(word) {
   errorLine.className = "output-line error";
   errorLine.textContent = `❌ Error: No definition found for "${word}"`;
   output.appendChild(errorLine);
+
+  const spacer = document.createElement("div");
+  spacer.className = "output-line";
+  spacer.innerHTML = "&nbsp;";
+  output.appendChild(spacer);
+}
+
+// Add word to history
+function addToHistory(word) {
+  // Remove word if it already exists (to move it to front)
+  const index = wordHistory.indexOf(word);
+  if (index > -1) {
+    wordHistory.splice(index, 1);
+  }
+
+  // Add to beginning of array
+  wordHistory.unshift(word);
+
+  // Limit history size
+  if (wordHistory.length > MAX_HISTORY_SIZE) {
+    wordHistory = wordHistory.slice(0, MAX_HISTORY_SIZE);
+  }
+
+  // Save to storage
+  chrome.storage.local.set({ wordHistory });
+
+  // Reset history navigation index
+  historyIndex = -1;
+}
+
+// Show word history
+function showHistory() {
+  if (wordHistory.length === 0) {
+    const noHistoryLine = document.createElement("div");
+    noHistoryLine.className = "output-line";
+    noHistoryLine.innerHTML =
+      '<span style="color: #9ca3af;">No words in history yet.</span>';
+    output.appendChild(noHistoryLine);
+    return;
+  }
+
+  const historyTitle = document.createElement("div");
+  historyTitle.className = "output-line";
+  historyTitle.innerHTML =
+    '<span style="color: #4ade80; font-weight: 600;">📚 Recent Words:</span>';
+  output.appendChild(historyTitle);
+
+  wordHistory.slice(0, 5).forEach((word, index) => {
+    const historyItem = document.createElement("div");
+    historyItem.className = "output-line";
+    historyItem.style.paddingLeft = "16px";
+    historyItem.innerHTML = `<span style="color: #60a5fa;">${
+      index + 1
+    }.</span> <span style="color: #e5e5e5; cursor: pointer;" onclick="wordInput.value='${word}'; wordInput.focus();">${word}</span>`;
+    output.appendChild(historyItem);
+  });
 
   const spacer = document.createElement("div");
   spacer.className = "output-line";

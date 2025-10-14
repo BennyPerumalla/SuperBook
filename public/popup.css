@@ -253,6 +253,10 @@ body {
   transition: all 0.2s;
 }
 
+.clear-btn:first-of-type {
+  right: 70px;
+}
+
 .clear-btn:hover {
   background: #333;
   color: #e5e5e5;
