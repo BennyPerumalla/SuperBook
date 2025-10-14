@@ -10,7 +10,7 @@ let isInteracting = false;
 let enabled = true;
 let lastSelectionRect = null;
 
-const FETCH_TIMEOUT = 5000; 
+const FETCH_TIMEOUT = 5000;
 const MAX_RETRIES = 2;
 
 function initializeSuperBook() {
@@ -64,7 +64,10 @@ function isValidSelection(selection) {
   if (!selection || selection.isCollapsed) return false;
 
   const anchorNode = selection.anchorNode && selection.anchorNode.parentElement;
-  if (anchorNode && anchorNode.closest("input, textarea, [contenteditable=true]"))
+  if (
+    anchorNode &&
+    anchorNode.closest("input, textarea, [contenteditable=true]")
+  )
     return false;
 
   const text = selection.toString().trim();
@@ -120,17 +123,17 @@ function createHoverButton() {
     if (iconUrl) {
       logo.src = iconUrl;
       logo.onerror = () => {
-        console.warn('Failed to load SuperBook icon, using fallback');
-        logo.style.backgroundColor = '#4ade80';
-        logo.style.borderRadius = '50%';
+        console.warn("Failed to load SuperBook icon, using fallback");
+        logo.style.backgroundColor = "#4ade80";
+        logo.style.borderRadius = "50%";
       };
     } else {
-      logo.style.backgroundColor = '#4ade80';
-      logo.style.borderRadius = '50%';
+      logo.style.backgroundColor = "#4ade80";
+      logo.style.borderRadius = "50%";
     }
   } catch (e) {
-    logo.style.backgroundColor = '#4ade80';
-    logo.style.borderRadius = '50%';
+    logo.style.backgroundColor = "#4ade80";
+    logo.style.borderRadius = "50%";
   }
   btn.appendChild(logo);
 
@@ -196,7 +199,9 @@ async function showTooltip(word, position) {
 
   const content = document.createElement("div");
   content.className = "superbook-definition";
-  content.innerHTML = `<span class="superbook-loading">Looking up "${escapeHtml(word)}"</span>`;
+  content.innerHTML = `<span class="superbook-loading">Looking up "${escapeHtml(
+    word
+  )}"</span>`;
   tooltipEl.appendChild(content);
   document.documentElement.appendChild(tooltipEl);
 
@@ -208,7 +213,9 @@ async function showTooltip(word, position) {
 
     try {
       const res = await fetch(
-        `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word.toLowerCase())}`,
+        `https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(
+          word.toLowerCase()
+        )}`,
         { signal: controller.signal }
       );
 
@@ -237,17 +244,34 @@ async function showTooltip(word, position) {
       content.innerHTML = "";
       const parts = [];
       if (entry.word)
-        parts.push(`<div class="superbook-word">${escapeHtml(entry.word)}</div>`);
+        parts.push(
+          `<div class="superbook-word">${escapeHtml(entry.word)}</div>`
+        );
       if (entry.phonetic || (entry.phonetics && entry.phonetics[0])) {
-        const ph = entry.phonetic || (entry.phonetics?.[0]?.text) || "";
-        if (ph) parts.push(`<div class="superbook-pronunciation">${escapeHtml(ph)}</div>`);
+        const ph = entry.phonetic || entry.phonetics?.[0]?.text || "";
+        if (ph)
+          parts.push(
+            `<div class="superbook-pronunciation">${escapeHtml(ph)}</div>`
+          );
       }
       if (meaning.partOfSpeech)
-        parts.push(`<div class="superbook-definition"><strong>${escapeHtml(meaning.partOfSpeech)}</strong></div>`);
+        parts.push(
+          `<div class="superbook-definition"><strong>${escapeHtml(
+            meaning.partOfSpeech
+          )}</strong></div>`
+        );
       if (def.definition)
-        parts.push(`<div class="superbook-definition">${escapeHtml(def.definition)}</div>`);
+        parts.push(
+          `<div class="superbook-definition">${escapeHtml(
+            def.definition
+          )}</div>`
+        );
       if (def.example)
-        parts.push(`<div class="superbook-definition" style="opacity:.8;font-style:italic">"${escapeHtml(def.example)}"</div>`);
+        parts.push(
+          `<div class="superbook-definition" style="opacity:.8;font-style:italic">"${escapeHtml(
+            def.example
+          )}"</div>`
+        );
 
       content.innerHTML = parts.join("");
       tooltipEl.classList.add("show");
@@ -255,30 +279,44 @@ async function showTooltip(word, position) {
       clearTimeout(timeout);
       console.error(err);
 
-      
       let msg;
-      if (err.name === "AbortError") msg = "Request timed out. Please try again.";
-      else if (err instanceof TypeError) msg = "Network error. Please check your connection.";
+      if (err.name === "AbortError")
+        msg = "Request timed out. Please try again.";
+      else if (err instanceof TypeError)
+        msg = "Network error. Please check your connection.";
       else if (typeof err.message === "string") msg = err.message;
       else msg = "Something went wrong. Please try again.";
 
-      content.innerHTML = `<span class="superbook-definition" style="color:#ef4444">${escapeHtml(msg)}</span>`;
+      content.innerHTML = `<span class="superbook-definition" style="color:#ef4444">${escapeHtml(
+        msg
+      )}</span>`;
 
-      const retryBtn = document.createElement("button");
-      retryBtn.textContent = "Retry";
-      retryBtn.className = "superbook-retry-btn";
-      retryBtn.onclick = async () => {
-        retries++;
-        if (retries <= MAX_RETRIES) {
+      // Only show retry button if we haven't exceeded max retries
+      if (retries < MAX_RETRIES) {
+        const retryBtn = document.createElement("button");
+        retryBtn.textContent = "Retry";
+        retryBtn.className = "superbook-retry-btn";
+        retryBtn.onclick = async () => {
+          retries++;
+          // Remove the retry button before retrying
+          if (retryBtn.parentNode) {
+            retryBtn.parentNode.removeChild(retryBtn);
+          }
           content.innerHTML = `<span class="superbook-loading">Retrying (${retries}/${MAX_RETRIES})...</span>`;
           await fetchDefinition();
-        } else {
-          content.innerHTML = `<span class="superbook-definition" style="color:#ef4444">Failed after multiple attempts.</span>`;
-        }
-      };
-      content.appendChild(retryBtn);
+        };
+        content.appendChild(retryBtn);
+      } else {
+        // Show final failure message after max retries
+        const finalMsg = document.createElement("div");
+        finalMsg.className = "superbook-definition";
+        finalMsg.style.color = "#ef4444";
+        finalMsg.textContent =
+          "Failed after multiple attempts. Please try again later.";
+        content.appendChild(finalMsg);
+      }
+
       tooltipEl.classList.add("show");
-      
     }
   };
 
@@ -287,7 +325,11 @@ async function showTooltip(word, position) {
   const onDocClick = (ev) => {
     const target = ev.target;
     if (!tooltipEl) return;
-    if (tooltipEl.contains(target) || (hoverButtonEl && hoverButtonEl.contains(target))) return;
+    if (
+      tooltipEl.contains(target) ||
+      (hoverButtonEl && hoverButtonEl.contains(target))
+    )
+      return;
     removeTooltip();
     document.removeEventListener("click", onDocClick, true);
   };
@@ -308,4 +350,3 @@ if (document.readyState === "loading") {
 } else {
   initializeSuperBook();
 }
-

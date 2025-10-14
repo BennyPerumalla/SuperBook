@@ -35,6 +35,8 @@ SuperBook is an **open-source Chrome extension** that enhances your reading expe
 - 🚀 **Fast & Lightweight:** Built with performance and low resource usage in mind
 - 🔒 **Privacy-Focused:** Works entirely offline after setup; no data collection
 - 🌐 **Universal Compatibility:** Works seamlessly across all websites
+- ⌨️ **Keyboard Navigation:** Use ↑/↓ arrows to browse word history
+- 📚 **Word History:** Automatically saves and displays recent lookups
 
 ---
 
